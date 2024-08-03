@@ -1,0 +1,73 @@
+﻿@model ProductViewModel
+
+<form method="post" class="mb-5" enctype="multipart/form-data">
+    <div class="p-4 mt-4 border">
+        <h2 class="text-primary">Create Product</h2>
+        <hr/>
+        <div class="mb-2 py-2">
+            <label asp-for="Product.Title" class="form-label"></label>
+            <input asp-for="Product.Title" class="form-control" />
+            <span asp-validation-for="Product.Title" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Product.Description" class="form-label"></label>
+            <input asp-for="Product.Description" class="form-control" />
+            <span asp-validation-for="Product.Description" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Product.ISBN" class="form-label"></label>
+            <input asp-for="Product.ISBN" class="form-control" />
+            <span asp-validation-for="Product.ISBN" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Product.Author" class="form-label"></label>
+            <input asp-for="Product.Author" class="form-control" />
+            <span asp-validation-for="Product.Author" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Product.ListPrice" class="form-label"></label>
+            <input asp-for="Product.ListPrice" class="form-control" />
+            <span asp-validation-for="Product.ListPrice" class="text-danger"></span>
+        </div>
+        <div class="mb- py-2">
+            <label asp-for="Product.Price" class="form-label"></label>
+            <input asp-for="Product.Price" class="form-control" />
+            <span asp-validation-for="Product.Price" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Product.Price10" class="form-label"></label>
+            <input asp-for="Product.Price10" class="form-control" />
+            <span asp-validation-for="Product.Price10" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Product.Price20" class="form-label"></label>
+            <input asp-for="Product.Price20" class="form-control" />
+            <span asp-validation-for="Product.Price20" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Product.CategoryID" class="form-label"></label>
+            <select asp-for="Product.CategoryID" asp-items="@Model.CategoryList" class="form-select">
+                <option disabled selected>--Select Category--</option>
+            </select>
+            <span asp-validation-for="Product.CategoryID" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Product.ImageUrl" class="form-label"></label>
+            <input asp-for="Product.ImageUrl" class="form-control" type="file" />
+        </div>
+        <div class="row py-2">
+            <div class="col-6 col-lg-3">
+                <button class="btn btn-primary form-control" type="submit">Create</button>
+            </div>
+            <div class="col-6 col-lg-3">
+                <a asp-controller="Product" asp-action="index" class="btn btn-light form-control border">Back to Products List</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+    <partial name="_ValidationScriptsPartial"/>
+    }
+}

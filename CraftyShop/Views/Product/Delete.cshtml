@@ -1,0 +1,63 @@
+﻿@model Product
+
+<form method="post" class="mb-5">
+    <div class="p-4 mt-4 border">
+        <h2 class="text-primary">Delete Product</h2>
+        <hr />
+        <div class="mb-2 py-2">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Description" class="form-label"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="ISBN" class="form-label"></label>
+            <input asp-for="ISBN" class="form-control" />
+            <span asp-validation-for="ISBN" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Author" class="form-label"></label>
+            <input asp-for="Author" class="form-control" />
+            <span asp-validation-for="Author" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="ListPrice" class="form-label"></label>
+            <input asp-for="ListPrice" class="form-control" />
+            <span asp-validation-for="ListPrice" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Price" class="form-label"></label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Price10" class="form-label"></label>
+            <input asp-for="Price10" class="form-control" />
+            <span asp-validation-for="Price10" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="Price20" class="form-label"></label>
+            <input asp-for="Price20" class="form-control" />
+            <span asp-validation-for="Price20" class="text-danger"></span>
+        </div>
+        <div class="mb-2 py-2">
+            <label asp-for="CategoryID" class="form-label"></label>
+            <select asp-for="CategoryID" class="form-select">
+                <option disabled selected>@Model.CategoryID</option>
+            </select>
+            <span asp-validation-for="CategoryID" class="text-danger"></span>
+        </div>
+        <div class="row py-2">
+            <div class="col-6 col-lg-3">
+                <button class="btn btn-danger form-control" type="submit">Delete</button>
+            </div>
+            <div class="col-6 col-lg-3">
+                <a asp-controller="Product" asp-action="index" class="btn btn-light form-control border">Back to Products List</a>
+            </div>
+        </div>
+    </div>
+</form>
