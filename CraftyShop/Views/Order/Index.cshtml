@@ -1,0 +1,54 @@
+﻿@model List<Order>
+@{
+    var x = "all";
+    var statusList = new List<string>();
+    statusList.AddRange(new[] { "Pending", "Approved", "Processing","Shipped", "Cancelled", "Refunded"});
+    var statusSelectList = statusList.Select(u => new SelectListItem
+    {
+        Text = u,
+        Value = u,
+    });
+}
+
+<div class="card my-4 border-0">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <h2 class="py-2 text-white text-center">Order List</h2>
+    </div>
+    <div class="card-body p-0 m-0 mt-5 mx-auto">
+        <div class="input-group">
+            <span class="input-group-text bg-primary text-white fw-semibold border-0"
+                  id="inputGroup-sizing-default">
+                Order Status
+            </span>
+            <select asp-for="@x" asp-items="@statusSelectList" class="form-select" onchange="handleSelectChange(this)">
+                <option selected>all</option>
+            </select>
+        </div>
+    </div>
+</div>
+<table id="myTable" class="table-bordered table-striped table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+<script type="text/javascript">
+    var x = '@x';
+    function handleSelectChange(selectElement) {
+        x = selectElement.value;
+        loadTableData(x);
+    }
+</script>
+@section scripts{
+    @{
+        <script src="~/js/Order.js"></script>
+    }
+}

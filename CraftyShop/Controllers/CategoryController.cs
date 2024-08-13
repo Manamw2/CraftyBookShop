@@ -1,12 +1,14 @@
 ﻿using CraftyShop.Data;
 using CraftyShop.Models;
 using CraftyShop.Repositories.interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CraftyShop.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepo;

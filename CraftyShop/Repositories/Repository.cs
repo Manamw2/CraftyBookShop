@@ -1,6 +1,8 @@
 ﻿using CraftyShop.Data;
 using CraftyShop.Repositories.interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Linq.Expressions;
 namespace CraftyShop.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
@@ -18,14 +20,35 @@ namespace CraftyShop.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<T?> Get(System.Linq.Expressions.Expression<Func<T, bool>> filter)
+        public async Task<T?> Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
-            return await dbSet.FirstOrDefaultAsync(filter);
+            if (includeProperties.IsNullOrEmpty())
+            {
+                return await dbSet.FirstOrDefaultAsync(filter);
+            }
+            IQueryable<T> query = dbSet;
+            foreach (var prop in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(prop);
+            }
+            return await query.FirstOrDefaultAsync(filter);
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
-            return dbSet;
+            IQueryable<T> query = dbSet;
+            if (!includeProperties.IsNullOrEmpty())
+            {
+                foreach (var prop in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(prop);
+                }
+            }
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            return query;
         }
 
         public async Task Remove(T entity)

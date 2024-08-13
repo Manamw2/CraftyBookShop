@@ -1,9 +1,11 @@
 ﻿using CraftyShop.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CraftyShop.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -11,10 +13,62 @@ namespace CraftyShop.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            List<IdentityRole> roles = new List<IdentityRole>{
+                new IdentityRole{
+                    Name = "admin",
+                    NormalizedName = "ADMIN"
+                },
+                new IdentityRole{
+                    Name = "user",
+                    NormalizedName = "USER"
+                },
+                new IdentityRole{
+                    Name = "company",
+                    NormalizedName = "Company"
+                },
+                new IdentityRole{
+                    Name = "employee",
+                    NormalizedName = "EMPLOYEE"
+                },
+            };
+
+            // Create a password hasher
+            var hasher = new PasswordHasher<AppUser>();
+
+            // Create admin user
+            var adminUser = new AppUser
+            {
+                Id = "1", // Specify a GUID or some unique identifier
+                UserName = "admin@example.com",
+                NormalizedUserName = "ADMIN@EXAMPLE.COM",
+                Email = "admin@example.com",
+                NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                EmailConfirmed = true,
+                PasswordHash = hasher.HashPassword(null, "Admin123!"), // Use a strong password
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+
+            // Seed admin user
+            modelBuilder.Entity<AppUser>().HasData(adminUser);
+
+            // Assign admin role to admin user
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            {
+                UserId = adminUser.Id,
+                RoleId = roles.First(r => r.Name == "admin").Id
+            });
+
+            modelBuilder.Entity<IdentityRole>().HasData(roles);
+
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Action", DisplayOrder = 1 },
                 new Category { Id = 2, Name = "SciFi", DisplayOrder = 2 },
@@ -100,7 +154,40 @@ namespace CraftyShop.Data
                     Price20 = 20,
                     CategoryID = 3,
                 }
-                ); ;
+                );
+            modelBuilder.Entity<Company>().HasData(
+              new Company
+              {
+                  Id = 1,
+                  Name = "Tech Solution",
+                  StreetAddress = "123 Tech St",
+                  City = "Tech City",
+                  PostalCode = "12121",
+                  State = "IL",
+                  PhoneNumber = "6669990000"
+              },
+              new Company
+              {
+                  Id = 2,
+                  Name = "Vivid Books",
+                  StreetAddress = "999 Vid St",
+                  City = "Vid City",
+                  PostalCode = "66666",
+                  State = "IL",
+                  PhoneNumber = "7779990000"
+              },
+              new Company
+              {
+                  Id = 3,
+                  Name = "Readers Club",
+                  StreetAddress = "999 Main St",
+                  City = "Lala land",
+                  PostalCode = "99999",
+                  State = "NY",
+                  PhoneNumber = "1113335555"
+              }
+              );
+
 
         }
     }
