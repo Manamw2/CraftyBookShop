@@ -14,13 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.LoginPath = $"/Identity/Account/Login";
-    options.LoginPath = $"/Identity/Account/Logout";
-    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
-});
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AzureConnection")));
 
 builder.Services.AddRazorPages();
 
@@ -45,6 +39,14 @@ builder.Services.AddAuthentication().AddFacebook(options =>
     options.AppSecret = builder.Configuration["Facebook:AppSecret"];
 });
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
+
+
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
@@ -64,8 +66,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//app.ApplyMigraions();
-//app.Seed();
+app.ApplyMigraions();
+app.Seed();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -79,6 +81,7 @@ app.UseAuthorization();
 
 app.UseSession();
 app.MapRazorPages();
+
 
 app.MapControllerRoute(
     name: "default",
